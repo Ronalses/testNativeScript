@@ -4,34 +4,32 @@ import { Page } from "ui/page";
 import { TextField } from "ui/text-field";
 import { Label } from "ui/label";
 
+import { WebViewInterface } from 'nativescript-webview-interface';
+
 
 @Component({
     selector: "osd-web",
     moduleId: module.id,
-    templateUrl: "./web.component.html",
+    template: "<WebView #web></WebView>"
 })
-export class WebComponent implements AfterViewInit {
-    public webViewSrc: string = 'https://openseadragon.github.io/';
+export class WebComponent implements OnInit {
 
-    @ViewChild("myWebView") webViewRef: ElementRef;
-    @ViewChild("urlField") urlFieldRef: ElementRef;
-    @ViewChild("labelResult") labelResultRef: ElementRef;
+    private webViewInterface: WebViewInterface;
+    private loadedHtml: boolean = false;
 
-    ngAfterViewInit() {
-        let webview: WebView = this.webViewRef.nativeElement;
-        let label: Label = this.labelResultRef.nativeElement;
-        label.text = "WebView is still loading...";
+    @ViewChild('web')
+    htmlWebViewRef: ElementRef;
 
-        webview.on(WebView.loadFinishedEvent, function (args: LoadEventData) {
-            let message;
-            if (!args.error) {
-                message = "WebView finished loading of " + args.url;
-            } else {
-                message = "Error loading " + args.url + ": " + args.error;
-            }
+    ngOnInit(): void {
+        this.webViewInterface = new WebViewInterface(this.htmlWebView,
+            '~/www/index.html');
 
-            label.text = message;
-            console.log("WebView message - " + message);
+        this.htmlWebView.on(WebView.loadFinishedEvent, () => {
+            this.loadedHtml = true
         });
+    }
+
+    private get htmlWebView(): WebView {
+        return this.htmlWebViewRef.nativeElement;
     }
 }

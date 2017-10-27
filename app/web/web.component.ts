@@ -15,14 +15,14 @@ import { WebViewInterface } from 'nativescript-webview-interface';
 export class WebComponent implements OnInit {
 
     private webViewInterface: WebViewInterface;
-    private loadedHtml: boolean = false;
+    private loadedHtml: boolean = false
 
     @ViewChild('web')
     htmlWebViewRef: ElementRef;
 
     ngOnInit(): void {
         this.webViewInterface = new WebViewInterface(this.htmlWebView,
-            '~/www/index.html');
+            '~/www/osd/demo.html');
 
         this.htmlWebView.on(WebView.loadFinishedEvent, () => {
             this.loadedHtml = true
